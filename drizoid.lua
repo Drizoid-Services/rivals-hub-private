@@ -22,7 +22,7 @@ local Window = Rayfield:CreateWindow({
         Invite = "uhcbF5HtC3",
         RememberJoins = true
     },
-    KeySystem = true,
+    KeySystem = false,
     KeySettings = {
         Title = "Rivals Key System",
         Subtitle = "Key System",
