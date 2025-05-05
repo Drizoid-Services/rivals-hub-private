@@ -1,49 +1,53 @@
--- Corrected Key Prompt GUI setup
+-- Custom Key System
+local keySystem = {
+    -- Define the valid key
+    validKey = "Wafle1kdono",  -- Replace with your desired key
+    enteredKey = "",
 
-local player = game.Players.LocalPlayer
-local gui = Instance.new("ScreenGui", player.PlayerGui)
-gui.Name = "KeyPromptGUI"
-
--- Create a Frame for the key prompt
-local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 300, 0, 150)
-frame.Position = UDim2.new(0.5, -150, 0.5, -75)
-frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-frame.BorderSizePixel = 0
-
--- TextBox for entering the key
-local textBox = Instance.new("TextBox", frame)
-textBox.Size = UDim2.new(0, 250, 0, 30)
-textBox.Position = UDim2.new(0, 25, 0, 40)
-textBox.PlaceholderText = "Enter Drizoid key here"
-textBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-textBox.TextColor3 = Color3.fromRGB(0, 0, 0)
-
--- Submit Button
-local submitButton = Instance.new("TextButton", frame)
-submitButton.Size = UDim2.new(0, 100, 0, 30)
-submitButton.Position = UDim2.new(0.5, -50, 0, 80)
-submitButton.Text = "Submit"
-submitButton.BackgroundColor3 = Color3.fromRGB(60, 120, 255)
-submitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-
--- Error message Label
-local errorLabel = Instance.new("TextLabel", frame)
-errorLabel.Size = UDim2.new(0, 250, 0, 30)
-errorLabel.Position = UDim2.new(0, 25, 0, 120)
-errorLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
-errorLabel.BackgroundTransparency = 1
-errorLabel.TextSize = 14
-errorLabel.Text = "Invalid key. Please try again."
-errorLabel.Visible = false
-
--- Validate key and load script
-submitButton.MouseButton1Click:Connect(function()
-    local inputKey = textBox.Text
-    if validateKey(inputKey) then
-        gui:Destroy()  -- Remove the key prompt GUI
-        loadCheatScript()  -- Load the cheat script
-    else
-        errorLabel.Visible = true  -- Show error message if key is invalid
+    -- Prompt for key input
+    promptKey = function()
+        -- For a console-based input (adjust as needed for your platform)
+        print("Enter the cheat key:")
+        local userInput = io.read()  -- Assuming console input
+        if userInput == keySystem.validKey then
+            print("Key accepted! Loading script...")
+            keySystem.enteredKey = userInput
+            return true
+        else
+            print("Invalid key. Please try again.")
+            return false
+        end
     end
-end)
+}
+
+-- Function to initialize the key system and validate the key
+local function initializeKeySystem()
+    local isKeyValid = false
+    while not isKeyValid do
+        isKeyValid = keySystem.promptKey()  -- Ask for the key until it's valid
+    end
+end
+
+-- Initialize the key system
+initializeKeySystem()
+
+-- Script URL to load
+local scriptURL = "https://raw.githubusercontent.com/Drizoid-Services/rivals-hub-private/refs/heads/main/drizoid.lua"  -- Example URL
+
+-- Function to load and execute the script after the key is validated
+local function loadAndExecuteScript(url)
+    -- Fetch the script from the provided URL
+    local scriptContent = game:HttpGet(url)  -- Assuming game environment (like Roblox)
+    
+    -- Execute the script using loadstring
+    local success, result = pcall(loadstring(scriptContent))
+    
+    if success then
+        print("Script loaded and executed successfully!")
+    else
+        print("Error executing the script: " .. result)
+    end
+end
+
+-- Now that the key has been validated, load and execute the script
+loadAndExecuteScript(scriptURL)
