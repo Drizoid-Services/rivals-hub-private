@@ -44,11 +44,12 @@ local function createUI()
     local label = Instance.new("TextLabel")
     local textBox = Instance.new("TextBox")
     local submitButton = Instance.new("TextButton")
+    local errorMessage = Instance.new("TextLabel")
 
     screenGui.Parent = game.CoreGui
     frame.Parent = screenGui
-    frame.Size = UDim2.new(0, 300, 0, 150)
-    frame.Position = UDim2.new(0.5, -150, 0.5, -75)
+    frame.Size = UDim2.new(0, 300, 0, 200)
+    frame.Position = UDim2.new(0.5, -150, 0.5, -100)
     frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 
     label.Parent = frame
@@ -69,12 +70,26 @@ local function createUI()
     submitButton.Size = UDim2.new(1, -20, 0, 40)
     submitButton.Position = UDim2.new(0, 10, 0, 80)
     submitButton.Text = "Submit"
+    submitButton.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+    submitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    
+    -- Error message label (Initially hidden)
+    errorMessage.Parent = frame
+    errorMessage.Size = UDim2.new(1, -20, 0, 30)
+    errorMessage.Position = UDim2.new(0, 10, 0, 130)
+    errorMessage.Text = "Invalid key! Try again."
+    errorMessage.TextColor3 = Color3.fromRGB(255, 0, 0)
+    errorMessage.BackgroundTransparency = 1
+    errorMessage.Visible = false
+
+    -- When the submit button is clicked, validate the key and load the script
     submitButton.MouseButton1Click:Connect(function()
         if validateKey() then
             print("Key is valid, loading Drizoid script...")
-            loadDrizoidScript()  -- Load the script if the key is correct
+            loadDrizoidScript()  -- Load and execute the script
+            screenGui:Destroy()   -- Destroy the UI after successful key validation and script execution
         else
-            print("Invalid key. Please try again.")
+            errorMessage.Visible = true  -- Show error message if the key is invalid
         end
     end)
 end
